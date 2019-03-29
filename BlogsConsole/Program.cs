@@ -18,7 +18,7 @@ namespace BlogsConsole
                 {
                     // Give user a choice
                     Console.WriteLine("What would you like to do? ");
-                    Console.Write("(1) Display all blogs (2) Add a blog or (3) Create a post:   ");
+                    Console.Write("(1) Display all blogs (2) Add a blog or (3) Create a post (4) Display posts ");
                     choice = Console.ReadLine();
 
                     if (choice == "1")
@@ -32,15 +32,15 @@ namespace BlogsConsole
                         {
                             Console.WriteLine(item.BlogId + "\t" + item.Name);
 
-                            // Display all Blogs from the database
+                /*            // Display all Blogs from the database
                             var showPostDb = new BloggingContext();
                             var blogger = showPostDb.Posts.Where(b => b.BlogId.Equals(item.BlogId));
-  
+
                             foreach (var posts in blogger)
                             {
                                 Console.WriteLine("\t\t" + posts.Title);
-                                Console.WriteLine("\t\t\t"+  posts.Content);
-                            }
+                                Console.WriteLine("\t\t\t" + posts.Content);
+                            }  */
                         }
                     }
                     else if (choice == "2")
@@ -79,17 +79,41 @@ namespace BlogsConsole
                             Console.WriteLine("Enter your post to " + thing.Name);
                             var postContent = Console.ReadLine();
 
-               //             var blogDb = new Blog { Name = thing.Name };
                             var postDb = new Post { Title = postTitle, Content = postContent, BlogId = thing.BlogId };
 
                             var db = new BloggingContext();
                             db.AddPost(postDb);
-                        }     
-                    
+                        }
+
                         logger.Info("Post added - {name}", name);
-
                     }
+                    else if (choice == "4")
+                    {
+                        // Display all Blogs from the database
+                        var showDb = new BloggingContext();
+                        var query = showDb.Blogs.OrderBy(b => b.BlogId);
+                        foreach (var item in query)
+                        {
+                            Console.WriteLine(item.BlogId + " Posts from " + item.Name);
+                        }
+                        // Select the Blog
+                        Console.WriteLine("Select the blog's post to display:");
+                        int blogId = int.Parse(Console.ReadLine());
+                        var blogCntxtDb = new BloggingContext();
+                        var name = blogCntxtDb.Blogs.Where(b => b.BlogId.Equals(blogId));
 
+                        // Display all Blogs from the database
+                        var showPostDb = new BloggingContext();
+                        var blogger = showPostDb.Posts.Where(b => b.BlogId.Equals(blogId));
+                        Console.WriteLine("Blog: " + name);
+                        foreach (var posts in blogger)
+                        {
+                            Console.WriteLine("Title: " + posts.Title);
+                            Console.WriteLine("Content: " + posts.Content);
+                        }
+
+                        logger.Info("Posts displayed - {name}", name);
+                    }
                 }
                 catch (Exception ex)
                 {
