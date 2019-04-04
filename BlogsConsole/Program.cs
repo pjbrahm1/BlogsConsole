@@ -4,7 +4,7 @@ using System;
 using System.Linq;
 
 namespace BlogsConsole
-{
+{    // Programming Assignment 10 - EF Blogs & Posts Review
     class MainClass
     {
         private static NLog.Logger logger = NLog.LogManager.GetCurrentClassLogger();
